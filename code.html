@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Techie Tastes</title>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #fff;
+            background-color: #121212;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
+                              url('canteen-background.jpg'), 
+                              url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1600&q=80');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            text-align: center;
+        }
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 15px 0;
+            text-align: center;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+        .navbar a {
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            display: inline-block;
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .navbar a:hover {
+            color: #ff6f61;
+            transform: translateY(-2px);
+        }
+        .welcome-container {
+            margin-top: 120px;
+            background-color: rgba(0, 0, 0, 0.65);
+            padding: 40px;
+            border-radius: 10px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .welcome-container h1 {
+            color: #ff6f61;
+            margin-top: 0;
+        }
+        .hero-banner {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        }
+        .menu-section {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 50px 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 40px auto;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .menu-section h2 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+            color: #ff6f61;
+        }
+        .menu-item {
+            margin: 20px 0;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.08);
+            padding: 15px;
+            border-radius: 8px;
+            transition: transform 0.2s ease, background-color 0.2s ease;
+        }
+        .menu-item:hover {
+            background-color: rgba(255, 255, 255, 0.12);
+        }
+        .menu-item img {
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
+            margin-right: 20px;
+            object-fit: cover;
+            border: 2px solid rgba(255, 111, 97, 0.4);
+            flex-shrink: 0;
+        }
+        .menu-item-content {
+            text-align: left;
+            flex-grow: 1;
+        }
+        .menu-item-content strong {
+            font-size: 1.3em;
+            display: block;
+            margin-bottom: 5px;
+            color: #ffffff;
+        }
+        .menu-item-content p {
+            margin: 5px 0 10px 0;
+            color: #ccc;
+            font-size: 0.95em;
+            line-height: 1.4;
+        }
+        .item-price {
+            font-size: 1.15em;
+            color: #ff6f61;
+            font-weight: bold;
+            margin: 5px 0 12px 0;
+            display: block;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .quantity-input {
+            width: 55px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            color: #000;
+            font-weight: bold;
+            font-size: 1em;
+            text-align: center;
+        }
+        .quantity-input:disabled {
+            background-color: #777;
+            color: #fff;
+            border-color: #555;
+            cursor: not-allowed;
+        }
+        .add-to-cart-button, .cancel-button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 9px 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+        .add-to-cart-button:hover {
+            background-color: #e95c53;
+            transform: scale(1.02);
+        }
+        .cancel-button {
+            background-color: #555;
+        }
+        .cancel-button:hover {
+            background-color: #d9534f;
+            transform: scale(1.02);
+        }
+        .total-display {
+            margin-top: 35px;
+            font-size: 1.8em;
+            color: #ff6f61;
+            border-top: 2px dashed rgba(255, 255, 255, 0.25);
+            padding-top: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .checkout-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.7em;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .checkout-button:hover {
+            background-color: #218838;
+            transform: scale(1.03);
+        }
+        .about-section, .contact-section {
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            padding: 50px 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            margin: 40px auto;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .about-section h2, .contact-section h2 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+            color: #ff6f61;
+        }
+        .about-section p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            color: #ddd;
+        }
+        .contact-section form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .contact-section input, .contact-section textarea {
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #444;
+            background-color: #222;
+            color: #fff;
+            font-family: inherit;
+        }
+        .contact-section input:focus, .contact-section textarea:focus {
+            outline: 2px solid #ff6f61;
+        }
+        .contact-section button {
+            background-color: #ff6f61;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background-color 0.2s ease;
+        }
+        .contact-section button:hover {
+            background-color: #e95c53;
+        }
+        .footer {
+            background-color: rgba(0, 0, 0, 0.95);
+            color: #bbb;
+            text-align: center;
+            padding: 25px 0;
+            margin-top: 60px;
+            width: 100%;
+            border-top: 1px solid #333;
+        }
+        .footer p {
+            margin: 5px 0;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <a href="#home">Home</a>
+    <a href="#menu">Menu</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+</nav>
+
+<!-- Welcome / Hero Section -->
+<div id="home" class="welcome-container">
+    <h1>Welcome to Techie Tastes!</h1>
+    <p>Explore our menu and order delicious freshly prepared food now!</p>
+    <img src="delisious image.jpg" 
+         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80';" 
+         alt="Delicious Food Display" 
+         class="hero-banner">
+</div>
+
+<!-- Menu Section -->
+<div id="menu" class="menu-section">
+    <h2>Our Menu</h2>
+    
+    <!-- Item 1: Burger -->
+    <div class="menu-item">
+        <img src="burger.webp" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=400&q=80';" 
+             alt="Burger">
+        <div class="menu-item-content">
+            <strong>Burger</strong>
+            <p>Our signature burger, made with fresh beef and topped with cheese, lettuce, and tomato.</p>
+            <span class="item-price">Price: ₹120.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Burger" data-price="120.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="120.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 2: Pizza -->
+    <div class="menu-item">
+        <img src="pizza.jpg" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=400&q=80';" 
+             alt="Pizza">
+        <div class="menu-item-content">
+            <strong>Pizza</strong>
+            <p>Freshly baked pizza with mozzarella cheese, tomato sauce, and your choice of toppings.</p>
+            <span class="item-price">Price: ₹249.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Pizza" data-price="249.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="249.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 3: Salad -->
+    <div class="menu-item">
+        <img src="salada.webp" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=400&q=80';" 
+             alt="Salad">
+        <div class="menu-item-content">
+            <strong>Salad</strong>
+            <p>Fresh mixed greens with your choice of toppings and dressing.</p>
+            <span class="item-price">Price: ₹90.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Salad" data-price="90.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="90.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 4: Chicken Wings -->
+    <div class="menu-item">
+        <img src="chicken wings.webp" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1567620832903-9fc6debc209f?auto=format&fit=crop&w=400&q=80';" 
+             alt="Chicken Wings">
+        <div class="menu-item-content">
+            <strong>Chicken Wings</strong>
+            <p>Crispy fried chicken wings tossed in your choice of sauce.</p>
+            <span class="item-price">Price: ₹180.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Chicken Wings" data-price="180.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="180.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 5: Fries -->
+    <div class="menu-item">
+        <img src="fries.jpg" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1576107232684-1279f3908594?auto=format&fit=crop&w=400&q=80';" 
+             alt="Fries">
+        <div class="menu-item-content">
+            <strong>Fries</strong>
+            <p>Crunchy fries cooked to perfection, served with your choice of dipping sauce.</p>
+            <span class="item-price">Price: ₹70.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Fries" data-price="70.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="70.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 6: Sandwich -->
+    <div class="menu-item">
+        <img src="sandwish.webp" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=400&q=80';" 
+             alt="Sandwich">
+        <div class="menu-item-content">
+            <strong>Sandwich</strong>
+            <p>Freshly made sandwich with your choice of fillings and toppings.</p>
+            <span class="item-price">Price: ₹100.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Sandwich" data-price="100.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="100.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Item 7: Smoothie -->
+    <div class="menu-item">
+        <img src="smoothi.webp" 
+             onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1505252585461-04db1eb84625?auto=format&fit=crop&w=400&q=80';" 
+             alt="Smoothie">
+        <div class="menu-item-content">
+            <strong>Smoothie</strong>
+            <p>Freshly blended chilled fruit smoothie made with seasonal fruit and fresh cream.</p>
+            <span class="item-price">Price: ₹100.00</span>
+            <div class="quantity-controls">
+                <input type="number" class="quantity-input" value="1" min="1">
+                <button class="add-to-cart-button" data-name="Smoothie" data-price="100.00">Add to Cart</button>
+                <button class="cancel-button" style="display: none;" data-price="100.00">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Total Display and Checkout -->
+    <div class="total-display">
+        <div>Total Amount: <span id="total">₹0.00</span></div>
+        <button id="checkout-button" class="checkout-button">Place Order</button>
+    </div>
+
+</div>
+
+<!-- About Section -->
+<div id="about" class="about-section">
+    <h2>About Techie Tastes</h2>
+    <p>Welcome to <strong>Techie Tastes</strong> — your campus and tech hub's favorite gourmet cafeteria! We fuel coders, students, and tech enthusiasts with freshly prepared burgers, hand-tossed pizzas, crispy sides, and revitalizing smoothies. Every order is crafted on-demand with premium ingredients to keep your energy and creativity running at peak performance.</p>
+</div>
+
+<!-- Contact Section -->
+<div id="contact" class="contact-section">
+    <h2>Contact Us</h2>
+    <p>Have special dietary requests or feedback? Send us a quick message!</p>
+    <form id="contact-form">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email or Student ID" required>
+        <textarea rows="4" placeholder="Your Message / Feedback" required></textarea>
+        <button type="submit">Send Message</button>
+    </form>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+    <p>&copy; 2026 Techie Tastes Canteen. All rights reserved.</p>
+    <p>Crafted for students and techies with passion &amp; good food.</p>
+</footer>
+
+<!-- Interactive JavaScript -->
+<script>
+    let total = 0;
+    const totalDisplay = document.getElementById('total');
+    const checkoutButton = document.getElementById('checkout-button');
+
+    // Attach individual button event handlers to each menu item
+    document.querySelectorAll('.menu-item').forEach(item => {
+        const addButton = item.querySelector('.add-to-cart-button');
+        const cancelButton = item.querySelector('.cancel-button');
+        const qtyInput = item.querySelector('.quantity-input');
+        const price = parseFloat(addButton.getAttribute('data-price'));
+
+        // Handle Add to Cart
+        addButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Validate quantity
+            let quantity = parseInt(qtyInput.value);
+            if (isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+                qtyInput.value = 1;
+            }
+
+            // Save the exact added quantity to the item container
+            item.setAttribute('data-added-qty', quantity);
+
+            // Update total
+            total += price * quantity;
+            
+            // Toggle UI states
+            qtyInput.disabled = true;
+            addButton.style.display = 'none';
+            cancelButton.style.display = 'inline-block';
+            
+            // Update total display
+            totalDisplay.textContent = '₹' + total.toFixed(2);
+        });
+
+        // Handle Cancel
+        cancelButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            
+            // Retrieve exact added quantity
+            const addedQty = parseInt(item.getAttribute('data-added-qty')) || parseInt(qtyInput.value) || 1;
+            
+            // Subtract from total
+            total -= price * addedQty;
+            if (total < 0.001) total = 0; // Guard against negative or floating zero
+            
+            // Remove added quantity attribute
+            item.removeAttribute('data-added-qty');
+
+            // Re-enable input and reset buttons
+            qtyInput.disabled = false;
+            cancelButton.style.display = 'none';
+            addButton.style.display = 'inline-block';
+            
+            // Update total display
+            totalDisplay.textContent = '₹' + total.toFixed(2);
+        });
+    });
+
+    // Checkout button feedback
+    checkoutButton.addEventListener('click', function() {
+        if (total === 0) {
+            alert('Your cart is empty! Please add items from the menu before ordering.');
+        } else {
+            alert('🎉 Order Placed Successfully!\nTotal Amount: ₹' + total.toFixed(2) + '\nYour food is being prepared at the counter.');
+        }
+    });
+
+    // Contact form feedback
+    document.getElementById('contact-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        alert('Thank you for your message! Techie Tastes team will get back to you shortly.');
+        this.reset();
+    });
+</script>
+
+</body>
+</html>
